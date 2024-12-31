@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+BIN=~/Code/C++/eureka-project/bin
+CACHE=~/.cache/eureka
+
+
+if [[ ! -f $CACHE ]]; then
+    $BIN > $CACHE
+fi
+
+now=$(date +%s)
+while read line; do
+    nm_time=${line%% *} # pulls 1st word
+    delta=$((nm_time - now))
+
+    if [[ delta -ge 0 ]]; then
+        line="${line#* }" # removes first word
+        min=${line%% *} # pulls 1st word
+        line="${line#* }" # removes first word
+        max=${line%% *} # pulls 1st word
+        line="${line#* }" # removes first word
+        dur=${line%% *} # pulls 1st word
+        name="${line#* }" # removes first word
+        format="["$(((30 + $min) / 60))"-"$(((30 + $max) / 60))
+        format=$format"|"$(((30 + $min + $dur) / 60))"-"$(((30 + $max + $dur) / 60))"]"
+        if [[ delta -lt 60 ]]; then
+            echo $name $delta"s "$format
+            echo
+            echo \#FF5500
+        else
+            echo $name $(($delta / 60))"m "$format
+            echo
+            if [[ delta -lt 300 ]]; then
+                echo \#FFAA00
+            elif [[ delta -lt 1800 ]]; then
+                echo \#FFFF00
+            fi
+        fi
+
+        exit
+    fi
+done < $CACHE
+
+echo "loading..."
+$BIN > $CACHE

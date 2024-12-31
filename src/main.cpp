@@ -17,27 +17,24 @@ std::array NMS{
     NM(30,  60, "Pazuzu")
 };
 
+void get_end_of_window(const Weather& weather, long& window_end) {
+    while (weather.is_active(Weather::seed(window_end += Weather::DURATION)));
+}
+
 void get_previous_window(const Weather& weather, Window& window) {
     while (!weather.is_active(Weather::seed(window.end -= Weather::DURATION)));
     window.start = window.end;
-    // NOTE:
-    // window.end is currently aligned to the start of the weather window
-    // it does not get algined to the end until get_end_of_window()
+    get_end_of_window(weather, window.end);
 
     while (weather.is_active(Weather::seed(window.start -= Weather::DURATION)));
     // offset back inside weather window
     window.start += Weather::DURATION;
 }
 
-void get_end_of_window(const Weather& weather, long& window_end) {
-    while (weather.is_active(Weather::seed(window_end += Weather::DURATION)));
-}
-
 void init(const long& eorzea_hours) {
     for (NM& nm : NMS) {
         nm.next.end = eorzea_hours;
         get_previous_window(nm.weather, nm.next);
-        get_end_of_window(nm.weather, nm.next.end);
     }
 }
 
@@ -46,7 +43,7 @@ void process_weather_window(const long& eorzea_hours) {
     for (NM& nm : NMS) {
         if (eorzea_hours <= nm.next.end)
             continue; // next already calculated
-        if (!(nm.weather.is_active(seed)))
+        if (!nm.weather.is_active(seed))
             continue;
         // new window
         nm.prev = nm.next;
