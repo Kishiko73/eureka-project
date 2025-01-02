@@ -34,6 +34,7 @@
 # Git
 .git
 
-# Makefile Build
+# Project & Artifacts
 bin
 build
+cache

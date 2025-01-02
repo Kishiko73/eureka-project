@@ -64,7 +64,7 @@ $(BUILD_DIR)/%.s: %.$(LANG)
 
 
 clean:
-	rm -rf $(BINARY) $(BUILD_DIR)
+	rm -rf $(BINARY) $(BUILD_DIR) cache
 
 
 -include $(DEPFILES)

@@ -1,21 +1,18 @@
-# eureka-project
-i3blocks script and program to show upcoming eureka NMs on the i3bar
+# Setup
+`git clone` inside your i3blocks `$SCRIPT_DIR` and build the project with make:
+```
+cd eureka-project
+make
+```
 
-# set-up
-download repo using `git clone`
-
-compile the binary with `cd eureka-project` `make`
-
-copy or link script file into i3blocks config directory
-
-`cp eureka-project/i3blocks-script ~/.config/i3blocks/eureka`
-
-`ln -s ~/Code/C++/eureka-project/i3blocks-script ~/.config/i3blocks/eureka`
-
-confirm the `$BIN` var in the copied script points to the binary file
-`BIN=~/Code/C++/eureka-project/bin`
-modify `~/.config/i3blocks/config` by adding the following (use whatever interval you like)
+copy the contents of [i3blocks.conf](i3blocks.conf) into your config file
 ```
 [eureka]
+command=$SCRIPT_DIR/eureka-project/script
 interval=1
 ```
+
+if you decided to clone to a different directory, ensure that both 
+[script](script) `WD=$SCRIPT_DIR/eureka-project` and 
+[i3blocks.conf](i3blocks.conf) `command=$SCRIPT_DIR/eureka-project/script` 
+reflect the correct locations
