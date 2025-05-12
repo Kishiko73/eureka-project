@@ -1,14 +1,16 @@
 #pragma once
 
 struct Weather {
-    const static char DURATION = 8;
+    // Duration of a single weather window in Eorzean Hours
+    const static char DURATION;
+    // min and max seed values of the given weather
     const char min, max;
 
-    Weather(const char& min, const char& max) : min(min), max(max) {}
+    Weather(const char min, const char max);
 
-    bool is_active(const char& seed) const;
+    // if the seed falls under the weather scope
+    bool is_active(const char seed) const;
 
-    static long chunk(const long& eorzea_hours);
-
-    static char seed(const long& eorzea_hours);
+    // generate a weather seed from the epoch time in eorzean hours
+    static char seed(const long eorzea_hours);
 };
