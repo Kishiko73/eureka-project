@@ -1,6 +1,6 @@
 ## made in reference to https://www.youtube.com/watch?v=DtGrdB8wQ_8 ##
 
-BINARY=bin
+BINARY=../eureka
 
 CODE_DIR=src
 INCLUDE_DIRS=include
@@ -34,11 +34,11 @@ DEPENDS      =$(SOURCES:%.$(LANG)=$(BUILD_DIR)/%.d)
 
 
 
+all: $(BINARY)
+
 run: $(BINARY)
 	./$(BINARY)
 
-
-all: $(BINARY)
 
 $(BINARY): $(OBJECTS)
 	$(CC) $(LIB_FLAGS) -o $@ $^

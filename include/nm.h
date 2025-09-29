@@ -16,5 +16,8 @@ struct NM {
 
     NM(const char weather_min, const char weather_max, const char* name);
 
+    static void stat_wait(long wait);
+    static bool stat_down(char const * const symbol, long down);
     void stat() const;
+    void watch() const;
 };

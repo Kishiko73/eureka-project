@@ -45,7 +45,8 @@ void process_weather_window(const long eorzea_hours) {
         nm.prev = nm.next;
         nm.next.start = nm.next.end = eorzea_hours;
         get_end_of_window(nm.weather, nm.next.end);
-        nm.stat();
+        //nm.stat();
+        nm.watch();
     }
 }
 
@@ -66,7 +67,7 @@ int main(int argc, char *argv[]) {
     long epoch_seconds = argc > 1
             ? atoi(argv[1])
             : time(NULL);
-    long ET_chunk = Time::chunk(epoch_seconds / Time::SECONDS_PER_HOUR);
+    long ET_chunk = Time::chunk(epoch_seconds / Time::SECONDS_PER_ET_HOUR);
 
     init(ET_chunk);
     for (int i = 64; --i >= 0; )
