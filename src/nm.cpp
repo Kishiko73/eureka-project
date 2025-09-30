@@ -48,6 +48,15 @@ bool NM::stat_down(char const * const symbol, long down) {
     return colour != Colours::down_good;
 }
 
+/**
+ * Display the status of the current NM using pango markup
+ *
+ * NM name                 (string)
+ * time until window start (minutes / seconds)
+ * next.start - prev.end   (minutes)
+ * next.start - prev.start (minutes)
+ * next.end   - prev.start (minutes)
+ */
 void NM::stat() const {
     printf("%s ", name);
 
@@ -58,21 +67,19 @@ void NM::stat() const {
         stat_down("▲", next.end   - prev.start); // best  case downtime
 
     printf("\n");
-    // flush stdout for i3blocks persistent interval to update correctly
-    fflush(stdout);
+    fflush(stdout); // for i3blocks persistent interval to update correctly
 }
 
 void NM::watch() const {
-    stat();
     long start = Time::SECONDS_PER_ET_HOUR * next.start;
 
-    // catch negative numbers (can occur during sleep/suspend etc)
-    if (start < time(NULL))
-        return;
+    // align remaining time to MM:59
+    if (start - time(NULL) > 60) {
+        stat();
+        sleep((start - time(NULL)) % 60 + 1);
+    }
 
-    // sleep for an extra second so mm:59 rounds down
-    sleep((start - time(NULL)) % 60 + 1);
-
+    // restat every minute, or every second when 60s remain
     while (start - time(NULL) > 0) {
         stat();
         if (start - time(NULL) > 60)
