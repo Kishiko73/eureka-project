@@ -65,6 +65,11 @@ void NM::stat() const {
 void NM::watch() const {
     stat();
     long start = Time::SECONDS_PER_ET_HOUR * next.start;
+
+    // catch negative numbers (can occur during sleep/suspend etc)
+    if (start < time(NULL))
+        return;
+
     // sleep for an extra second so mm:59 rounds down
     sleep((start - time(NULL)) % 60 + 1);
 
